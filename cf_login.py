@@ -4,38 +4,6 @@ import getpass
 from robobrowser import RoboBrowser
 
 root = '7'
-""" converter """
-def decode(s):
-	global root
-	res = ""
-	length = len(s)
-	i = 0
-	while i < length:
-		rng = ord(s[i])-ord(root)
-		jump = ord(s[i+1])-ord(root)
-		temp = 0
-		for j in range (0, rng):
-			temp += ord(s[i+j+2]) - ord(root) - jump
-		res += str(chr(temp))
-		i += rng + 2
-	return res
-
-def encode(s):
-	global root
-	res = ""
-	length = len(s)
-	for i in range (0, length):
-		rng = random.randint(1, 20)
-		res += str(chr(rng + ord(root)))
-		jump = random.randint(1,10)
-		res += str(chr(jump + ord(root)))
-		curr = ord(s[i])
-		for j in range (0, rng-1):
-			temp = random.randint(0, min(curr, 2+int(curr/(rng-j))))
-			res += str(chr(temp + ord(root) + jump))
-			curr -= temp
-		res += str(chr(curr + ord(root) + jump))
-	return res
 
 def get_secret(inclupass):
 	handle = None
@@ -44,9 +12,9 @@ def get_secret(inclupass):
 	if os.path.isfile(secret_loc):
 		secretfile = open(secret_loc, "r")
 		rawdata = secretfile.read().rstrip('\n').split()
-		handle = decode(rawdata[0])
+		handle = (rawdata[0])
 		if inclupass:
-			password = decode(rawdata[1])
+			password = (rawdata[1])
 		secretfile.close()
 	if inclupass:
 		return handle, password
@@ -74,7 +42,7 @@ def set_login(handle=None):
 	else:
 		secret_loc = os.path.join(os.path.dirname(__file__), "secret")
 		secretfile = open(secret_loc, "w")
-		secretfile.write(encode(handle) + " " + encode(password))
+		secretfile.write((handle) + " " + (password))
 		secretfile.close()
 		print("Successfully logged in as " + handle)
 
